@@ -1,57 +1,38 @@
 terraform {
   required_providers {
-    aws = {
-      source = "hashicorp/aws"
-      version = "5.33.0"
+    google = {
+      source  = "hashicorp/google"
+      version = "5.6.0"
+    }
+  }
+}
+
+provider "google" {
+  credentials = file(var.credentials)
+  project     = var.project
+  region      = var.region
+}
+
+
+resource "google_storage_bucket" "demo-bucket" {
+  name          = var.gcs_bucket_name
+  location      = var.location
+  force_destroy = true
+
+
+  lifecycle_rule {
+    condition {
+      age = 1
+    }
+    action {
+      type = "AbortIncompleteMultipartUpload"
     }
   }
 }
 
 
-provider "aws" {
-  region = "us-east-1"
+
+resource "google_bigquery_dataset" "demo_dataset" {
+  dataset_id = var.bq_dataset_name
+  location   = var.location
 }
-
-
-# resource "aws_iam_role" "example_role" {
-#   name = "examplerole"
-# 
-#   assume_role_policy = <<EOF
-#   {
-#     "Version": "2012-10-17",
-#     "Statement": [
-#       {
-#         "Effect": "Allow",
-#         "Principal": {
-#           "Service": "ec2.amazonaws.com"
-#         },
-#         "Action": "sts:AssumeRole"
-#       }
-#     ]
-#   }
-#   EOF
-# }
-# 
-# 
-# resource "aws_iam_role_policy_attachment" "example_attachment" {
-#   role = aws_iam_role.example_role.name
-#   policy_arn = "arn:aws:iam::aws:policy/AmazonS3FullAccess"
-# }
-# 
-# 
-# resource "aws_iam_instance_profile" "example_profile" {
-#   name = "example_profile"
-#   role = aws_iam_role.example_role.name
-# }
-# 
-# 
-# resource "aws_instance" "example_instance" {
-#   ami = "ami-06ca3ca175f37dd66"
-#   instance_type = "t2.micro"
-# 
-#   iam_instance_profile = aws_iam_instance_profile.example_profile.name
-# 
-#   tags = {
-#       Name = "example_instance"
-#     }
-# }

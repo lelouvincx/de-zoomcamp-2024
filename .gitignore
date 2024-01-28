@@ -197,3 +197,6 @@ terraform.rc
 # Main ignores
 .tool-versions
 .terraform.lock.hcl
+homework/week1/green_tripdata_2019-09.csv
+homework/week1/taxi+_zone_lookup.csv
+homework/week1/ingest.ipynb
