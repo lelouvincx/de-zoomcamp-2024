@@ -1,0 +1,26 @@
+version: "3"
+
+services:
+  pgdatabase:
+    image: postgres:13
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=password
+      - POSTGRES_DB=ny_taxi
+    volumes:
+      - "dtc_postgres_volume_local:/var/lib/postgresql/data"
+    ports:
+      - "5432:5432"
+    expose:
+      - "5432"
+
+  pgadmin:
+    image: dpage/pgadmin4
+    environment:
+      - PGADMIN_DEFAULT_EMAIL=admin@admin.com
+      - PGADMIN_DEFAULT_PASSWORD=password
+    ports:
+      - "8080:80"
+
+volumes:
+  dtc_postgres_volume_local: {}
